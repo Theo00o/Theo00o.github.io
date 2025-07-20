@@ -3,14 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>Prévisions Surf</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
 
     <h1>Tableau de Prévisions</h1>
-    <div id="table-container"></div>
+    <div id="table-container">Chargement...</div>
 
     <script>
+        fetch('Dashboard_data.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('table-container');
 
+                // Crée la table
+                const table = document.createElement('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+
+                // Récupère les clés (en-têtes)
+                const headers = Object.keys(data);
+                const headerRow = document.createElement('tr');
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                // Longueur des lignes (nombre d'heures)
+                const numRows = data[headers[0]].length;
+
+                // Crée les lignes de données
+                for (let i = 0; i < numRows; i++) {
+                    const row = document.createElement('tr');
+                    headers.forEach(header => {
+                        const td = document.createElement('td');
+                        td.textContent = data[header][i];
+                        row.appendChild(td);
+                    });
+                    tbody.appendChild(row);
+                }
+
+                table.appendChild(thead);
+                table.appendChild(tbody);
+                container.innerHTML = '';
+                container.appendChild(table);
+            })
+            .catch(error => {
+                document.getElementById('table-container').innerHTML = 'Erreur lors du chargement des données.';
+                console.error(error);
+            });
     </script>
 
 </body>
