@@ -39,31 +39,31 @@
 
                 // Récupère les clés (en-têtes)
                 const headers = Object.keys(data);
-                const numCols = data[headers[0]].length;
+                const numRows = data[headers[0]].length;
 
-                // Crée la ligne d'en-tête (les indices des valeurs)
+                // Crée la ligne d'en-tête (les clés)
                 const headerRow = document.createElement('tr');
                 headerRow.appendChild(document.createElement('th')); // Cellule vide en haut à gauche
-                for (let i = 0; i < numCols; i++) {
-                    const th = document.createElement('th');
-                    th.textContent = i;
-                    headerRow.appendChild(th);
-                }
-                thead.appendChild(headerRow);
-
-                // Crée les lignes pour chaque clé
                 headers.forEach(header => {
-                    const row = document.createElement('tr');
                     const th = document.createElement('th');
                     th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                // Crée les lignes pour chaque indice
+                for (let i = 0; i < numRows; i++) {
+                    const row = document.createElement('tr');
+                    const th = document.createElement('th');
+                    th.textContent = i;
                     row.appendChild(th);
-                    for (let i = 0; i < numCols; i++) {
+                    headers.forEach(header => {
                         const td = document.createElement('td');
                         td.textContent = data[header][i];
                         row.appendChild(td);
-                    }
+                    });
                     tbody.appendChild(row);
-                });
+                }
 
                 table.appendChild(thead);
                 table.appendChild(tbody);
