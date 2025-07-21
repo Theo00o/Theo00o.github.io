@@ -39,31 +39,31 @@
 
                 // Récupère les clés (en-têtes)
                 const headers = Object.keys(data);
-                const numRows = data[headers[0]].length;
+                const numCols = data[headers[0]].length;
 
-                // Crée la ligne d'en-tête (les clés)
+                // Crée la ligne d'en-tête (indices)
                 const headerRow = document.createElement('tr');
                 headerRow.appendChild(document.createElement('th')); // Cellule vide en haut à gauche
-                headers.forEach(header => {
-                    const th = document.createElement('th');
-                    th.textContent = header;
-                    headerRow.appendChild(th);
-                });
-                thead.appendChild(headerRow);
-
-                // Crée les lignes pour chaque indice
-                for (let i = 0; i < numRows; i++) {
-                    const row = document.createElement('tr');
+                for (let i = 0; i < numCols; i++) {
                     const th = document.createElement('th');
                     th.textContent = i;
+                    headerRow.appendChild(th);
+                }
+                thead.appendChild(headerRow);
+
+                // Crée une ligne pour chaque clé
+                headers.forEach(header => {
+                    const row = document.createElement('tr');
+                    const th = document.createElement('th');
+                    th.textContent = header; // Texte à gauche
                     row.appendChild(th);
-                    headers.forEach(header => {
+                    for (let i = 0; i < numCols; i++) {
                         const td = document.createElement('td');
                         td.textContent = data[header][i];
                         row.appendChild(td);
-                    });
+                    }
                     tbody.appendChild(row);
-                }
+                });
 
                 table.appendChild(thead);
                 table.appendChild(tbody);
